@@ -1,9 +1,7 @@
 //c++ is best
 
-#include <string>
 #include <string.h>
 #include <stdio.h>
-#include <iostream>
 
 class CmdLineOptParser {
 	public:
@@ -23,6 +21,7 @@ class CmdLineOptParser {
 					}
 
 					splitOpt = 0;
+					continue;
 				} else if( strlen(argv[i]) == 1) {
 					printf("Parse failed, Option without key given\n");
 					return false;
@@ -40,20 +39,21 @@ class CmdLineOptParser {
 				}
 			}
 
+			if( splitOpt ) {
+				Option(keyBuffer, nullptr);
+				splitOpt = 0;
+			}
+
 			return true;
 		};
 	protected:
 		bool Option(const char c, const char* info) {
-			printf("Option receid %c=%s\n", c, info);
+			printf("Option received %c=%s\n", c, info);
 			return true;
 		};
 };
 
 int main(int argc, char *argv[]) {
-	for(int i = 0; i < argc  ; i++){
-		printf("arg nr %d: %s\n", i, argv[i]);
-	}
-
 	CmdLineOptParser parser;
 
 	bool parseSuccess = parser.Parse(argc, argv);

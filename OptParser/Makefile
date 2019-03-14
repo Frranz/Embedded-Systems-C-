@@ -41,6 +41,7 @@ start: $(OUTPUT)
 submit:
 	@zip -rq $(SUBMIT_FILE_NAME) src include $(UNITTEST_DIR)
 	@echo "Submit file: $(SUBMIT_FILE_NAME)"
+	@echo "Curl Options: $(CURL_OPTIONS)"
 	@curl $(CURL_OPTIONS) --form solution=@$(SUBMIT_FILE_NAME) --form press=OK $(SUBMIT_URL)
 
 help:
