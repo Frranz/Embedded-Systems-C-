@@ -47,17 +47,5 @@ class CmdLineOptParser {
 			return true;
 		};
 	protected:
-		bool Option(const char c, const char* info) {
-			printf("Option received %c=%s\n", c, info);
-			return true;
-		};
+		virtual bool Option(const char c, const char* info);
 };
-
-int main(int argc, char *argv[]) {
-	CmdLineOptParser parser;
-
-	bool parseSuccess = parser.Parse(argc, argv);
-	printf("Parse returned %s\n", (parseSuccess) ? "true": "false");
-
-	return 0;
-}
