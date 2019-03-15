@@ -1,10 +1,11 @@
 #include "OptParser.cpp"
 
-class CmdToolBox : CmdLineOptParser {
-	bool Option(const char c, const char* info) override {
+class CmdToolBox : public CmdLineOptParser {
+	public:
+		bool Option(const char c, const char* info) {
 			printf("Option received %c=%s\n", c, info);
 			return true;
-	}
+		}
 };
 
 int main(int argc, char *argv[]) {

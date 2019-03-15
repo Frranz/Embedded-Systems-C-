@@ -3,10 +3,11 @@
 #include <string.h>
 #include <stdio.h>
 
-class CmdLineOptParser {
+class CmdLineOptParser{
 	public:
-		virtual ~CmdLineOptParser() = default;
-		bool Parse(int argc, char* argv[]) {
+ 		virtual ~CmdLineOptParser() = default;
+
+		bool Parse(int argc, char* argv[]){
 
 			char keyBuffer;
 
