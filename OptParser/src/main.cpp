@@ -1,4 +1,5 @@
-#include "OptParser.cpp"
+#include "../include/OptParser.h"
+#include <stdio.h>
 
 class CmdToolBox : public CmdLineOptParser{
 	public:
