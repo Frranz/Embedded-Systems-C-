@@ -5,7 +5,7 @@
 
 class CmdLineOptParser{
 	public:
- 		virtual ~CmdLineOptParser() = default;
+ 		//virtual ~CmdLineOptParser() = default;
 
 		bool Parse(int argc, char* argv[]){
 
