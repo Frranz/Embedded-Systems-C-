@@ -1,4 +1,7 @@
-#pragma once
+#ifndef OPTPARSER_H
+#define OPTPARSER_H
+
+#define MAX_OPTION_VALUE_LENGTH 50
 
 class CmdLineOptParser {
     public :
@@ -9,3 +12,5 @@ class CmdLineOptParser {
         // returns true , if option was successfully parsed .
         virtual bool Option( const char c , const char* info );
 };
+
+#endif
