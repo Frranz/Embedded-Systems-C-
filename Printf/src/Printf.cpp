@@ -1,5 +1,27 @@
 #include "../include/Printf.h"
 
+
+char* intToBaseString(int num, int base, char* c, char* cEnd) {
+    *cEnd = '\0';
+    unsigned int remainder;
+
+    unsigned int numUns = static_cast<unsigned int>(num);
+
+    while(numUns != 0 && c < cEnd) {
+        cEnd--;
+        remainder = numUns % base;
+        numUns = numUns / base;
+
+        if(remainder <= 9) {
+            *cEnd = 48 + remainder;
+        } else {
+            *cEnd = 96 + remainder - 9; // 9 because 0-9 a-f
+        }
+    }
+
+    return cEnd;
+}
+
 char* Printf(char* dst, const void* end, const char* fmt...) {
     //strncpy(dst, fmt, TeststringLength - 1);
     char* startBuff = dst;
@@ -9,6 +31,7 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
 
     int i;
     char* stringHelper;
+    char conversionBuffer[32]; // big enough to hold binary number
     int loopCounter;
     std::string s;
 
@@ -52,9 +75,27 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
                         }
                         break;
                     case 'x':
+                        i = va_arg(args, int);
+                        stringHelper = intToBaseString(i, 16, conversionBuffer, conversionBuffer + 20 -1);
+
+                        loopCounter = 0;
+                        while(stringHelper[loopCounter] != '\0' && dst < end && loopCounter < MAX_INT_AS_HEXSTRING_LENGTH) { //hier vielleicht lieber prüfen, das string helper nicht über ende von conversion buffer hinaus l#uft
+                            *dst = stringHelper[loopCounter];
+                            dst++;
+                            loopCounter++;
+                        }
 
                         break;
                     case 'b':
+                        i = va_arg(args, int);
+                        stringHelper = intToBaseString(i, 2, conversionBuffer, conversionBuffer + 20 -1);
+
+                        loopCounter = 0;
+                        while(stringHelper[loopCounter] != '\0' && dst < end && loopCounter < 32) { //hier vielleicht lieber prüfen, das string helper nicht über ende von conversion buffer hinaus l#uft
+                            *dst = stringHelper[loopCounter];
+                            dst++;
+                            loopCounter++;
+                        }
                         break;
                     default:
                         // return nullptr if unspecified %{character}
@@ -76,23 +117,8 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
 int main() {
     printf("turnup hier gehts los\n");
     char printHere[TeststringLength];
-    char* formattedString = Printf(printHere, printHere + TeststringLength, "int: %d\nunsginedint: %u\ncharacter: %c\nstring: %s\nhexaminus: %x\nhexaplus: %x\nbinaryminus: %b\nbinaryplus: %b\nprozentzeichen: %%", -74, 3, 'e', "ripx", -3064, 4603,-37, 37);
+    char* formattedString = Printf(printHere, printHere + TeststringLength, "int: %d\nunsginedint: %u\ncharacter: %c\nstring: %s\nhexaminus: %x\nhexaplus: %x\nbinaryminus: %b\nbinaryplus: %b\nprozentzeichen: %%\n", -74, 3, 'e', "ripx", -3064, 4603,-37, 37);
     std::cout << formattedString;
 
     return 0;
-}
-
-char* intToHexString(int num, char* c, char* cEnd) {
-    *cEnd = '\0';
-    unsigned int remainder;
-
-    while(num != 0) {
-        cEnd--;
-        remainder = num % 16;
-        num = num / 16;
-
-        *cEnd = 97 + remainder;
-    }
-
-    return cEnd;
 }
