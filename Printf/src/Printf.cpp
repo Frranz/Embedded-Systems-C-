@@ -24,6 +24,7 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
             if(lastWasPercent) {
                 switch(*fmt) {
                     case 'd':
+                    case 'u':
                         i = va_arg(args, int);
                         s = std::to_string(i);
 
@@ -31,11 +32,13 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
                         while(s[loopCounter] != '\0' && dst < end && loopCounter < 10) { // biggest 32bit integer has 10 digits
                             *dst = s[loopCounter];
                             dst++;
+                            loopCounter++;
                         }
                         break;
-                    case 'u':
-                        break;
                     case 'c':
+                        i = va_arg(args, int);
+                        *dst = static_cast<char>(i); // char is promoted to int when passed
+                        dst++;
                         break;
                     case 's':
                         break;
@@ -44,8 +47,10 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
                     case 'b':
                         break;
                     default:
+                        // return nullptr if unspecified %{character}
                         return nullptr;
                 }
+                lastWasPercent = false;
             } else {
                 *dst = *fmt;
                 dst++;
@@ -62,7 +67,7 @@ int main() {
     printf("turnup hier gehts los\n");
     char printHere[TeststringLength];
     char* formattedString = Printf(printHere, printHere + TeststringLength, "int: %d\nunsginedint: %u\ncharacter: %c\nstring: %s\n", -74, 3, "e", "ripx");
-    printf(formattedString);
+    std::cout << formattedString;
 
     return 0;
 }

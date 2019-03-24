@@ -2,6 +2,7 @@
 #include <cstdarg>
 #include <cstring>
 #include <string>
+#include <iostream>
 
 #define TeststringLength 300
 
