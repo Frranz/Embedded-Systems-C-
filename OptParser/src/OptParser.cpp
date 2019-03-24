@@ -18,7 +18,7 @@ bool CmdLineOptParser::Parse(int argc, char* argv[]) {
 	 without a value like -x */
 	int splitOpt = 0;
 
-	/* keyBuffer stores the variable if no value is gisizeof(char*)ven in
+	/* keyBuffer stores the variable if no value is given in
 	the string*/
 	char keyBuffer;
 	for( int i = 1; i < argc; i++ ){
@@ -39,7 +39,11 @@ bool CmdLineOptParser::Parse(int argc, char* argv[]) {
 				splitOpt = 0;
 				continue;
 			}
-		} else if( strnlen(argv[i], MAX_OPTION_VALUE_LENGTH) == 1) { //
+		} else if( strnlen(argv[i], MAX_OPTION_VALUE_LENGTH) == 1) { // invalid argument of length 1
+			return false;
+		}
+
+		if(argv[i][0] != '-') { // arguments should start with -
 			return false;
 		}
 

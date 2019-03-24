@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <cstdarg>
 #include <cstring>
+#include <string>
 
 #define TeststringLength 300
 
