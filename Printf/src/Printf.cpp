@@ -7,15 +7,21 @@ char* intToBaseString(int num, int base, char* c, char* cEnd) {
 
     unsigned int numUns = static_cast<unsigned int>(num);
 
+    if(numUns == 0) {
+        cEnd--;
+        *cEnd = '0';
+        return cEnd;
+    }
+
     while(numUns != 0 && c < cEnd) {
         cEnd--;
         remainder = numUns % base;
         numUns = numUns / base;
 
         if(remainder <= 9) {
-            *cEnd = 48 + remainder;
+            *cEnd = ASCII_VALUE_ZERO + remainder;
         } else {
-            *cEnd = 96 + remainder - 9; // 9 because 0-9 a-f
+            *cEnd = ASCII_VALUE_LOWER_A + remainder - 10; // 10 lower a is 10
         }
     }
 
@@ -31,7 +37,7 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
 
     int i;
     char* stringHelper;
-    char conversionBuffer[32]; // big enough to hold binary number
+    char conversionBuffer[MAX_INT_AS_BINARYSTRING_LENGTH];
     int loopCounter;
     std::string s;
 
@@ -87,7 +93,7 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
                         }
 
                         i = va_arg(args, int);
-                        stringHelper = intToBaseString(i, 16, conversionBuffer, conversionBuffer + 20 -1);
+                        stringHelper = intToBaseString(i, 16, conversionBuffer, conversionBuffer + MAX_INT_AS_BINARYSTRING_LENGTH -1);
 
                         loopCounter = 0;
                         while(stringHelper[loopCounter] != '\0' && dst < end && loopCounter < MAX_INT_AS_HEXSTRING_LENGTH) { //hier vielleicht lieber prüfen, das string helper nicht über ende von conversion buffer hinaus l#uft
@@ -105,16 +111,16 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
                             *dst = 'b';
                             dst++;
                         } else {
-                            //end is reached. can't break out of here, but will fail at while condition
+                            //end is reached. can't break out of switch/case, but will fail at while condition
                             continue;
                         }
 
 
                         i = va_arg(args, int);
-                        stringHelper = intToBaseString(i, 2, conversionBuffer, conversionBuffer + 20 -1);
+                        stringHelper = intToBaseString(i, 2, conversionBuffer, conversionBuffer + MAX_INT_AS_BINARYSTRING_LENGTH -1);
 
                         loopCounter = 0;
-                        while(stringHelper[loopCounter] != '\0' && dst < end && loopCounter < 32) { //hier vielleicht lieber prüfen, das string helper nicht über ende von conversion buffer hinaus l#uft
+                        while(stringHelper[loopCounter] != '\0' && dst < end && loopCounter < MAX_INT_AS_BINARYSTRING_LENGTH) {
                             *dst = stringHelper[loopCounter];
                             dst++;
                             loopCounter++;
@@ -137,12 +143,4 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
     //terminate string
     *dst = '\0';
     return startBuff;
-}
-
-int main() {
-    char printHere[TeststringLength];
-    char* formattedString = Printf(printHere, printHere + TeststringLength, "int: %d\nunsginedint: %u\ncharacter: %c\nstring: %s\nhexaminus: %x\nhexaplus: %x\nbinaryminus: %b\nbinaryplus: %b\nprozentzeichen: %%\n", -74, 3, 'e', "ripx", -3064, 4603,-37, 37);
-    std::cout << formattedString;
-
-    return 0;
 }
