@@ -75,6 +75,17 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
                         }
                         break;
                     case 'x':
+                        // add 0x to string
+                        *dst = '0';
+                        dst++;
+                        if(dst < end) {
+                            *dst = 'x';
+                            dst++;
+                        } else {
+                            //end is reached. can't break out of here, but will fail at while condition
+                            continue;
+                        }
+
                         i = va_arg(args, int);
                         stringHelper = intToBaseString(i, 16, conversionBuffer, conversionBuffer + 20 -1);
 
@@ -87,6 +98,18 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
 
                         break;
                     case 'b':
+                        // add 0b to string
+                        *dst = '0';
+                        dst++;
+                        if(dst < end) {
+                            *dst = 'b';
+                            dst++;
+                        } else {
+                            //end is reached. can't break out of here, but will fail at while condition
+                            continue;
+                        }
+
+
                         i = va_arg(args, int);
                         stringHelper = intToBaseString(i, 2, conversionBuffer, conversionBuffer + 20 -1);
 
@@ -111,11 +134,12 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
         fmt++;
     }
 
+    //terminate string
+    *dst = '\0';
     return startBuff;
 }
 
 int main() {
-    printf("turnup hier gehts los\n");
     char printHere[TeststringLength];
     char* formattedString = Printf(printHere, printHere + TeststringLength, "int: %d\nunsginedint: %u\ncharacter: %c\nstring: %s\nhexaminus: %x\nhexaplus: %x\nbinaryminus: %b\nbinaryplus: %b\nprozentzeichen: %%\n", -74, 3, 'e', "ripx", -3064, 4603,-37, 37);
     std::cout << formattedString;
