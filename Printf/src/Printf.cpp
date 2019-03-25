@@ -29,7 +29,6 @@ char* intToBaseString(int num, int base, char* c, char* cEnd) {
 }
 
 char* Printf(char* dst, const void* end, const char* fmt...) {
-    //strncpy(dst, fmt, TeststringLength - 1);
     char* startBuff = dst;
     bool lastWasPercent = false;
     va_list args;

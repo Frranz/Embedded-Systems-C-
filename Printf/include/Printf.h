@@ -15,6 +15,7 @@
 #define ASCII_VALUE_ZERO 48
 #define ASCII_VALUE_LOWER_A 97
 
-char* Printf(char* dst, const void* end , const char* fmt , ...) ;
+char* intToBaseString(int num, int base, char* c, char* cEnd);
+char* Printf(char* dst, const void* end , const char* fmt , ...);
 
 #endif
