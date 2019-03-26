@@ -5,16 +5,18 @@
 #include <stdio.h>
 #include <climits>
 
-static const unsigned int MAX_INT_AS_STRING_LENGTH = 11; // I really dont know, how to do this, without having
+static const unsigned int MAX_INT_AS_STRING_LENGTH = decimalLengthOfInt(UINT_MAX) + 1;// +1 for '-' sign
 static const unsigned int MAX_INT_AS_HEXSTRING_LENGTH = sizeof(int) * 2;
-static const unsigned int MAX_INT_AS_BINARYSTRING_LENGTH = (sizeof(int)*8) + 1;
+static const unsigned int MAX_INT_AS_BINARYSTRING_LENGTH = (sizeof(int)*8);
 
 
 int decimalLengthOfInt(unsigned int n) {
     int i = 0;
     while(n>0) {
         n = n/10;
+        i++;
     }
+    return i;
 }
 
 // Copies Array from toCopy to dst; Stops when reaching "end" or when "limit" chars have been copied

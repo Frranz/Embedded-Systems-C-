@@ -1,6 +1,7 @@
 #include "../include/Printf.h"
 
 #include <iostream>
+#include <climits>
 
 static const unsigned int TESTSTRING_LENGTH = 300;
 
