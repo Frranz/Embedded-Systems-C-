@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#define TESTSTRING_LENGTH 300
+static const unsigned int TESTSTRING_LENGTH = 300;
 
 int main() {
     char printHere[TESTSTRING_LENGTH];

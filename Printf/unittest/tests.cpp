@@ -2,17 +2,15 @@
 #include "../include/Printf.h"
 
 #include <cstring>
-#include <stdio.h>
 
 TEST_CASE("Creates correct string", "") {
 
     SECTION("complex fmt with all specified replacements") {
         char actualString[300];
-        char fmt[] = "0d:%d 12d:%d 0u:%u 13u:%u -13u:%u Qc:%c test123s:%s 0x:%x 37x:%x -208957203x:%x 0b:%b 235234b:%b -3489753b:%b prozent:%%";
-        char expectedString[] = "0d:0 12d:12 0u:0 13u:13 -13u:-13 Qc:Q test123s:test123 0x:0x0 37x:0x25 -208957203x:0x5f76a8dfc 0b:0b0 235234b:0b010001101010010001101001011 -3489753b:0x4b768ad prozent:%";
+        char fmt[] = "0d:%d 12d:%d 0u:%u 13u:%u -13d:%d Qc:%c test123s:%s 0x:%x 37x:%x -208957203x:%x 0b:%b 235234b:%b -3489753b:%b prozent:%%";
+        char expectedString[] = "0d:0 12d:12 0u:0 13u:13 -13d:-13 Qc:Q test123s:test123 0x:0x0 37x:0x25 -208957203x:0xf38b90ed 0b:0b0 235234b:0b111001011011100010 -3489753b:0b1111111110010101100000000100111 prozent:%";
         char* pointerResult = Printf(actualString, actualString + 300 - 1, fmt, 0, 12, 0, 13, -13, 'Q', "test123", 0, 37, -208957203, 0, 235234, -3489753);
 
-        printf("%s\n%s\n", expectedString, pointerResult);
         REQUIRE(strncmp(pointerResult, expectedString, 170) == 0);
     }
 
@@ -25,10 +23,9 @@ TEST_CASE("Creates correct string", "") {
 
     SECTION("if string requires more space it stops at end") {
         char actualString[20];
-        char* pointerResult = Printf(actualString, actualString + 20 -1, "1234567890123456789%d", 395987594);
+        char* pointerResult = Printf(actualString, actualString + 20 -1, "123456789012345678%d", 395987594);
 
-        printf("%s\n%s\n", actualString, "12345678901234567893");
-        REQUIRE(strncmp(pointerResult, "12345678901234567893", 21) == 0);
+        REQUIRE(strncmp(pointerResult, "1234567890123456783", 21) == 0);
     }
 }
 

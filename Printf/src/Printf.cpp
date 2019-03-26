@@ -2,11 +2,34 @@
 
 #include <cstdarg>
 #include <string>
+#include <stdio.h>
+#include <climits>
 
-#define MAX_INT_AS_STRING_LENGTH 10
-#define MAX_INT_AS_HEXSTRING_LENGTH 8
-#define MAX_INT_AS_BINARYSTRING_LENGTH 32
+static const unsigned int MAX_INT_AS_STRING_LENGTH = 11; // I really dont know, how to do this, without having
+static const unsigned int MAX_INT_AS_HEXSTRING_LENGTH = sizeof(int) * 2;
+static const unsigned int MAX_INT_AS_BINARYSTRING_LENGTH = (sizeof(int)*8) + 1;
 
+
+int decimalLengthOfInt(unsigned int n) {
+    int i = 0;
+    while(n>0) {
+        n = n/10;
+    }
+}
+
+// Copies Array from toCopy to dst; Stops when reaching "end" or when "limit" chars have been copied
+char* addStringToString(char* dst, const void* end, char* toCopy, unsigned int limit) {
+    unsigned int loopCounter = 0;
+    while(toCopy[loopCounter] != '\0' && dst < end && loopCounter < limit) {
+        *dst = toCopy[loopCounter];
+        dst++;
+        loopCounter++;
+    }
+
+    return dst;
+}
+
+// writes representative of number in char array. Base defines the string representation of the number
 char* intToBaseString(int num, int base, char* c, char* cEnd) {
     *cEnd = '\0';
     unsigned int remainder;
@@ -59,17 +82,24 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
             if(lastWasPercent) {
                 switch(*fmt) {
                     case 'd':
+                        {
+                            int i = va_arg(args, int);
+                            if(i < 0 ) {
+                                i = i * (-1);
+                                *dst = '-';
+                                dst++;
+                            }
+                            char* stringHelper = intToBaseString(i, 10, conversionBuffer, conversionBuffer + MAX_INT_AS_STRING_LENGTH - 1);
+
+                            dst = addStringToString(dst, end, stringHelper, MAX_INT_AS_STRING_LENGTH);
+                            break;
+                        }
                     case 'u':
                         {
                             int i = va_arg(args, int);
-                            std::string s = std::to_string(i);
+                            char* stringHelper = intToBaseString(i, 10, conversionBuffer, conversionBuffer + MAX_INT_AS_STRING_LENGTH - 1);
 
-                            int loopCounter = 0;
-                            while(s[loopCounter] != '\0' && dst < end && loopCounter < MAX_INT_AS_STRING_LENGTH) {
-                                *dst = s[loopCounter];
-                                dst++;
-                                loopCounter++;
-                            }
+                            dst = addStringToString(dst, end, stringHelper, MAX_INT_AS_STRING_LENGTH);
                             break;
                         }
                     case 'c':
@@ -83,12 +113,7 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
                         {
                             char* stringHelper = va_arg(args, char*);
 
-                            int loopCounter = 0;
-                            while(stringHelper[loopCounter] != '\0' && dst < end) {
-                                *dst = stringHelper[loopCounter];
-                                dst++;
-                                loopCounter++;
-                            }
+                            dst = addStringToString(dst, end, stringHelper, UINT_MAX);
                             break;
                         }
                     case 'x':
@@ -108,12 +133,7 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
 
                             char* stringHelper = intToBaseString(i, 16, conversionBuffer, conversionBuffer + MAX_INT_AS_BINARYSTRING_LENGTH -1);
 
-                            int loopCounter = 0;
-                            while(stringHelper[loopCounter] != '\0' && dst < end && loopCounter < MAX_INT_AS_HEXSTRING_LENGTH) { //hier vielleicht lieber prüfen, das string helper nicht über ende von conversion buffer hinaus l#uft
-                                *dst = stringHelper[loopCounter];
-                                dst++;
-                                loopCounter++;
-                            }
+                            dst = addStringToString(dst, end, stringHelper, MAX_INT_AS_HEXSTRING_LENGTH);
 
                             break;
                         }
@@ -133,12 +153,7 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
                             int i = va_arg(args, int);
                             char* stringHelper = intToBaseString(i, 2, conversionBuffer, conversionBuffer + MAX_INT_AS_BINARYSTRING_LENGTH -1);
 
-                            int loopCounter = 0;
-                            while(stringHelper[loopCounter] != '\0' && dst < end && loopCounter < MAX_INT_AS_BINARYSTRING_LENGTH) {
-                                *dst = stringHelper[loopCounter];
-                                dst++;
-                                loopCounter++;
-                            }
+                            dst = addStringToString(dst, end, stringHelper, MAX_INT_AS_BINARYSTRING_LENGTH);
                             break;
                         }
                     default:
