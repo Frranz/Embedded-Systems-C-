@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <cstring>
 
 template<size_t Stringsize>
 PreAllocString<Stringsize>::operator const char *() const{
@@ -53,13 +54,64 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(const char* rh
     return *this;
 }
 
+template<size_t Stringsize>
+PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char* const rhs) {
+    unsigned int i = 0;
+
+    while(rhs[i] != '0' && i < Stringsize - 1) {
+        myString[i] = rhs[i];
+        i++;
+    }
+
+    myString[i] = '\0';
+
+    return *this;
+}
+
+template<size_t Stringsize>
+PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char rhs) {
+    unsigned int iMyString = static_cast<unsigned int>(GetLength());
+
+    myString[iMyString] = rhs;
+    iMyString++;
+    myString[iMyString] = '\0';
+    return *this;
+}
+
+template<size_t Stringsize>
+PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char const * rhs) {
+    unsigned int iMyString = static_cast<unsigned int>(GetLength());
+    unsigned int jRhs = 0;
+
+    while(iMyString < Stringsize - 1 && rhs[jRhs] != '\0') {
+        myString[iMyString] = rhs[jRhs];
+        iMyString++;
+        jRhs++;
+    }
+
+    myString[iMyString] = '\0';
+    return *this;
+}
+
+
 int main() {
     PreAllocString<20> myNiceString;
     myNiceString = 'a';
     std::cout << myNiceString[0];
 
-    myNiceString = "kekek123";
-    printf("mein String: %s\n", myNiceString[0]);
+    const char* bla = "hallo ich bins";
+    myNiceString = bla;
+    printf("string: %s\n", &myNiceString[0]);
+
+// testing char* const
+    char blub[] = "na du";
+    myNiceString = reinterpret_cast<char* const>(blub);
+    printf("string2: %s\n", myNiceString);
+    //printf("mein String: %s\n", myNiceString[0]);
+
+    myNiceString += 'k';
+    printf("string2: %s\n", myNiceString);
+
 
     return 0;
 }
