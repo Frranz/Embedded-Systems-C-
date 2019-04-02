@@ -1,3 +1,4 @@
+template <size_t Stringsize>
 class PreAllocString{
     operator const char *() const;
     operator const void *() const;
@@ -19,4 +20,7 @@ class PreAllocString{
 
     void AddFormat(const char* format,...);
     void AddWhiteSpace();
+
+private:
+    char myString[Stringsize];
 }
