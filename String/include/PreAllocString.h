@@ -1,5 +1,8 @@
+#include <cstddef>
+
 template <size_t Stringsize>
 class PreAllocString{
+public:
     operator const char *() const;
     operator const void *() const;
 
@@ -7,7 +10,7 @@ class PreAllocString{
 
     size_t GetLength() const;
 
-    constexp size_t SizeOf();
+    constexpr size_t SizeOf();
 
     void Empty();
 
@@ -23,4 +26,4 @@ class PreAllocString{
 
 private:
     char myString[Stringsize];
-}
+};
