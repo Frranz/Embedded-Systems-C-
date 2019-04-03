@@ -1,8 +1,10 @@
 #include "../include/PreAllocString.h"
+#include "../include/Printf.h"
 
 #include <iostream>
 #include <stdio.h>
 #include <cstring>
+#include <cstdarg>
 
 template<size_t Stringsize>
 PreAllocString<Stringsize>::operator const char *() const{
@@ -72,27 +74,46 @@ template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char rhs) {
     unsigned int iMyString = static_cast<unsigned int>(GetLength());
 
-    myString[iMyString] = rhs;
-    iMyString++;
-    myString[iMyString] = '\0';
+    if(iMyString < Stringsize - 2) {
+        myString[iMyString] = rhs;
+        iMyString++;
+        myString[iMyString] = '\0';
+    }
     return *this;
 }
 
 template<size_t Stringsize>
-PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char const * rhs) {
+PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char const* rhs) {
     unsigned int iMyString = static_cast<unsigned int>(GetLength());
-    unsigned int jRhs = 0;
 
-    while(iMyString < Stringsize - 1 && rhs[jRhs] != '\0') {
-        myString[iMyString] = rhs[jRhs];
+    if(iMyString < Stringsize - 2) {
+        myString[iMyString] = *rhs;
         iMyString++;
-        jRhs++;
+        myString[iMyString] = '\0';
     }
-
-    myString[iMyString] = '\0';
     return *this;
 }
 
+template<size_t Stringsize>
+void PreAllocString<Stringsize>::AddFormat(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    size_t endOfString = GetLength();
+
+    Printf(&myString[endOfString], myString + Stringsize - 1, format, args);
+    va_end(args);
+}
+
+template<size_t Stringsize>
+void PreAllocString<Stringsize>::AddWhiteSpace() {
+    unsigned int iMyString = static_cast<unsigned int>(GetLength());
+
+    if(iMyString < Stringsize - 2) {
+        myString[iMyString] = ' ';
+        iMyString++;
+        myString[iMyString] = '\0';
+    }
+}
 
 int main() {
     PreAllocString<20> myNiceString;
@@ -105,12 +126,25 @@ int main() {
 
 // testing char* const
     char blub[] = "na du";
-    myNiceString = reinterpret_cast<char* const>(blub);
-    printf("string2: %s\n", myNiceString);
+    myNiceString = static_cast<char* const>(blub);
+    printf("string2: %s\n", &myNiceString[0]);
     //printf("mein String: %s\n", myNiceString[0]);
 
     myNiceString += 'k';
-    printf("string2: %s\n", myNiceString);
+    printf("string3: %s\n", &myNiceString[0]);
+
+    // testing char const* rhs +=
+    char myZ = 'z';
+    char const* aNiceLetter = &myZ;
+    myNiceString += aNiceLetter;
+    printf("string4: %s\n", &myNiceString[0]);
+
+    myNiceString.AddWhiteSpace();
+    myNiceString += 'k';
+    printf("string5: %s\n", &myNiceString[0]);
+
+    myNiceString.AddFormat("%b", 3);
+    printf("string5: %s\n", &myNiceString[0]);
 
 
     return 0;
