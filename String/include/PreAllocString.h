@@ -52,7 +52,7 @@ PreAllocString<Stringsize>::operator const void *() const{
 template<size_t Stringsize>
 const char & PreAllocString<Stringsize>::operator [] (const int idx){
     return myString[idx];
-}
+};
 
 template<size_t Stringsize>
 size_t PreAllocString<Stringsize>::GetLength() const {
@@ -63,6 +63,11 @@ size_t PreAllocString<Stringsize>::GetLength() const {
     }
 
     return len;
+};
+
+template<size_t Stringsize>
+constexpr size_t PreAllocString<Stringsize>::SizeOf(){
+    return Stringsize;
 }
 
 template<size_t Stringsize>
@@ -73,7 +78,7 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char rhs) {
     }
 
     return *this;
-}
+};
 
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(const char* rhs) {
@@ -87,7 +92,7 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(const char* rh
     myString[i] = '\0';
 
     return *this;
-}
+};
 
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char* const rhs) {
@@ -101,7 +106,7 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char* const rh
     myString[i] = '\0';
 
     return *this;
-}
+};
 
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char rhs) {
@@ -113,7 +118,7 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char rhs) {
         myString[iMyString] = '\0';
     }
     return *this;
-}
+};
 
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char const* rhs) {
@@ -125,7 +130,7 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char const* r
         myString[iMyString] = '\0';
     }
     return *this;
-}
+};
 
 template<size_t Stringsize>
 void PreAllocString<Stringsize>::AddFormat(const char* format, ...) {
@@ -135,7 +140,7 @@ void PreAllocString<Stringsize>::AddFormat(const char* format, ...) {
 
     vaPrintf(&myString[endOfString], myString + Stringsize - 1, format, args);
     va_end(args);
-}
+};
 
 template<size_t Stringsize>
 void PreAllocString<Stringsize>::AddWhiteSpace() {
@@ -146,7 +151,7 @@ void PreAllocString<Stringsize>::AddWhiteSpace() {
         iMyString++;
         myString[iMyString] = '\0';
     }
-}
+};
 
 /*#include <cstddef>
 
