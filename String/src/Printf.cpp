@@ -2,6 +2,7 @@
 
 #include <cstdarg>
 #include <climits>
+#include <iostream>
 
 static const unsigned int MAX_INT_AS_STRING_LENGTH = decimalLengthOfInt(UINT_MAX) + 1;// +1 for '-' sign
 static const unsigned int MAX_INT_AS_HEXSTRING_LENGTH = sizeof(int) * 2;
@@ -58,14 +59,27 @@ char* intToBaseString(int num, int base, char* c, char* cEnd) {
 }
 
 char* Printf(char* dst, const void* end, const char* fmt...) {
+
+    char* returnPtr;
+    va_list args;
+    va_start(args,fmt);
+    returnPtr = vaPrintf(dst, end, fmt, args);
+    va_end(args);
+    return returnPtr;
+
+
+}
+
+
+char* vaPrintf(char* dst, const void* end, const char* fmt, va_list args) {
     if(dst == nullptr || end == nullptr || fmt == nullptr || dst >= end) {
         return nullptr;
     }
 
     char* startBuff = dst;
     bool lastWasPercent = false;
-    va_list args;
-    va_start(args, fmt);
+    //va_list args;
+    //va_start(args, fmt);
 
     char conversionBuffer[MAX_INT_AS_BINARYSTRING_LENGTH];
 
@@ -151,6 +165,7 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
                             }
 
                             int i = va_arg(args, int);
+                            std::cout << "ein int:" << i << '\n';
                             char* stringHelper = intToBaseString(i, 2, conversionBuffer, conversionBuffer + MAX_INT_AS_BINARYSTRING_LENGTH -1);
 
                             dst = addStringToString(dst, end, stringHelper, MAX_INT_AS_BINARYSTRING_LENGTH);
@@ -173,6 +188,6 @@ char* Printf(char* dst, const void* end, const char* fmt...) {
     //terminate string
     *dst = '\0';
 
-    va_end(args);
+    //va_end(args);
     return startBuff;
 }

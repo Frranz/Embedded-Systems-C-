@@ -100,7 +100,7 @@ void PreAllocString<Stringsize>::AddFormat(const char* format, ...) {
     va_start(args, format);
     size_t endOfString = GetLength();
 
-    Printf(&myString[endOfString], myString + Stringsize - 1, format, args);
+    vaPrintf(&myString[endOfString], myString + Stringsize - 1, format, args);
     va_end(args);
 }
 
@@ -116,7 +116,7 @@ void PreAllocString<Stringsize>::AddWhiteSpace() {
 }
 
 int main() {
-    PreAllocString<20> myNiceString;
+    PreAllocString<50> myNiceString;
     myNiceString = 'a';
     std::cout << myNiceString[0];
 
@@ -143,7 +143,7 @@ int main() {
     myNiceString += 'k';
     printf("string5: %s\n", &myNiceString[0]);
 
-    myNiceString.AddFormat("%b", 3);
+    myNiceString.AddFormat("%b kek", 3);
     printf("string5: %s\n", &myNiceString[0]);
 
 
