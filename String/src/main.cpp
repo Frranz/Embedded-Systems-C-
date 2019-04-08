@@ -36,6 +36,17 @@ int main() {
     myNiceString.AddFormat("%b kek", 3);
     printf("string5: %s\n", &myNiceString[0]);
 
+    printf("\n\n\n");
+
+    PreAllocString<11> myNiceString3;
+    PreAllocString<11> myNiceString2;
+
+    const char* halloString = "Hallo";
+    const char* weltString = "Welt";
+    myNiceString3 = halloString;
+    myNiceString2 = weltString;
+
+    printf("hallo: %s welt: %s", static_cast<const char*>(myNiceString3), static_cast<const char*>(myNiceString2));
 
     return 0;
 }
