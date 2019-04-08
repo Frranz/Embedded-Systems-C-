@@ -65,7 +65,19 @@ TEST_CASE("Testing member functions") {
     SECTION("Testing SizeOf") {
         PreAllocString<11> myPreAllocString;
 
-        REQUIRE(myPreAllocString.SizeOf() == 11);
+        REQUIRE(myPreAllocString.SizeOf() == 10);
+    }
+
+    SECTION("Testing Empty") {
+        PreAllocString<11> myPreAllocString;
+        myPreAllocString += 'a';
+
+        REQUIRE(myPreAllocString[0] == 'a');
+
+        myPreAllocString.Empty();
+
+        REQUIRE(myPreAllocString[0] == '\0');
+        REQUIRE(myPreAllocString.GetLength() == 0);
     }
 
     SECTION("Testing Add Whitespace") {

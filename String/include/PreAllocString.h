@@ -67,8 +67,14 @@ size_t PreAllocString<Stringsize>::GetLength() const {
 
 template<size_t Stringsize>
 constexpr size_t PreAllocString<Stringsize>::SizeOf(){
-    return Stringsize;
+    return Stringsize - 1;
 }
+
+template<size_t Stringsize>
+void PreAllocString<Stringsize>::Empty() {
+    myString[0] = '\0';
+}
+
 
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char rhs) {
