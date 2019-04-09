@@ -70,7 +70,7 @@ size_t PreAllocString<Stringsize>::GetLength() const {
 
 template<size_t Stringsize>
 constexpr size_t PreAllocString<Stringsize>::SizeOf(){
-    return Stringsize - 1;
+    return Stringsize;
 }
 
 template<size_t Stringsize>
@@ -105,7 +105,8 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(const char* rh
 
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char* const rhs) {
-    unsigned int i = 0;
+    this += static_cast<const char*>(rhs);
+    /*unsigned int i = 0;
 
     while(rhs[i] != '0' && i < Stringsize - 1) {
         myString[i] = rhs[i];
@@ -114,7 +115,7 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char* const rh
 
     myString[i] = '\0';
 
-    return *this;
+    return *this;*/
 };
 
 template<size_t Stringsize>
