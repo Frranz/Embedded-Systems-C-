@@ -10,6 +10,9 @@
 #include <cstring>
 #include <cstdarg>
 
+#define CREATE(varName, size)       \
+            PreAllocString<size> varName
+
 template <size_t Stringsize>
 class PreAllocString{
 public:
@@ -35,7 +38,7 @@ public:
     void AddWhiteSpace();
 
 private:
-    char myString[Stringsize];
+    char myString[Stringsize] {'\0'};
 };
 
 // IMPLEMENTATION
@@ -59,7 +62,7 @@ size_t PreAllocString<Stringsize>::GetLength() const {
     size_t len = 0;
 
     while(myString[len] != 0 && len < Stringsize) {
-        len++;
+        ++len;
     }
 
     return len;
@@ -92,7 +95,7 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(const char* rh
 
     while(rhs[i] != '0' && i < Stringsize - 1) {
         myString[i] = rhs[i];
-        i++;
+        ++i;
     }
 
     myString[i] = '\0';
@@ -106,7 +109,7 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char* const rh
 
     while(rhs[i] != '0' && i < Stringsize - 1) {
         myString[i] = rhs[i];
-        i++;
+        ++i;
     }
 
     myString[i] = '\0';
@@ -120,7 +123,7 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char rhs) {
 
     if(iMyString < Stringsize - 2) {
         myString[iMyString] = rhs;
-        iMyString++;
+        ++iMyString;
         myString[iMyString] = '\0';
     }
     return *this;
@@ -132,7 +135,7 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char const* r
 
     if(iMyString < Stringsize - 2) {
         myString[iMyString] = *rhs;
-        iMyString++;
+        ++iMyString;
         myString[iMyString] = '\0';
     }
     return *this;
@@ -154,39 +157,10 @@ void PreAllocString<Stringsize>::AddWhiteSpace() {
 
     if(iMyString < Stringsize - 2) {
         myString[iMyString] = ' ';
-        iMyString++;
+        ++iMyString;
         myString[iMyString] = '\0';
     }
 };
 
-/*#include <cstddef>
-
-template <size_t Stringsize>
-class PreAllocString{
-public:
-    operator const char *() const;
-    operator const void *() const;
-
-    const char & operator [] (const int idx);
-
-    size_t GetLength() const;
-
-    constexpr size_t SizeOf();
-
-    void Empty();
-
-    PreAllocString& operator =(char rhs);
-    PreAllocString& operator =(const char * rhs);
-    PreAllocString& operator =(char * const rhs);
-
-    PreAllocString& operator +=(char rhs);
-    PreAllocString& operator +=(char const * rhs);
-
-    void AddFormat(const char* format,...);
-    void AddWhiteSpace();
-
-private:
-    char myString[Stringsize];
-};*/
 
 #endif
