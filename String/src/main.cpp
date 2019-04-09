@@ -10,7 +10,23 @@ int main() {
     peter+='a';
     peter+='a';
     peter+='a';
-    printf("hier ist peter: %s", static_cast<const char*>(peter));
+    printf("hier ist peter: %s\n", static_cast<const char*>(peter));
+
+    PreAllocString<3> myPreAllocString;
+    myPreAllocString += 'e';
+    myPreAllocString += 'e';
+    myPreAllocString += 'e';
+    myPreAllocString += 'e';
+    myPreAllocString += 'e';
+    myPreAllocString += 'e';
+    myPreAllocString += 'e';
+
+
+    printf("using +=: %s\n", static_cast<const char*>(myPreAllocString));
+
+    PreAllocString<10> myPreAllocString3;
+    myPreAllocString3.AddFormat("%s", "1234567890");
+    printf("add format: %s\n", static_cast<const char*>(myPreAllocString3));
 
 /*    PreAllocString<11> myNiceString;
     myNiceString = 'a';

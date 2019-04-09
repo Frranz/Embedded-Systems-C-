@@ -5,9 +5,6 @@
 #include "../include/Printf.h"
 
 #include <cstddef>
-#include <iostream>
-#include <stdio.h>
-#include <cstring>
 #include <cstdarg>
 
 #define CREATE(varName, size)       \
@@ -85,7 +82,7 @@ void PreAllocString<Stringsize>::Empty() {
 
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char rhs) {
-    if(Stringsize => 2) {
+    if(Stringsize >= 2) {
         myString[0] = rhs;
         myString[1] = '\0';
     }
@@ -97,7 +94,7 @@ template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(const char* rhs) {
     unsigned int i = 0;
 
-    while(rhs[i] != '\0' && i < Stringsize) {
+    while(rhs[i] != '\0' && i < Stringsize -1) {
         myString[i] = rhs[i];
         ++i;
     }
@@ -116,7 +113,7 @@ template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char rhs) {
     size_t iMyString = GetLength();
 
-    if(iMyString < Stringsize - 2) {
+    if(iMyString < Stringsize - 1) {
         myString[iMyString] = rhs;
         ++iMyString;
         myString[iMyString] = '\0';
@@ -128,7 +125,7 @@ template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char const* rhs) {
     size_t i = GetLength();
 
-    while(rhs[i] != '\0' && i < Stringsize - 2) {
+    while(rhs[i] != '\0' && i < Stringsize -1) {
         myString[i] = rhs[i];
         ++i;
     }

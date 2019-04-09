@@ -42,7 +42,6 @@ TEST_CASE("Test implemented Operators") {
         const char* testString = "testString";
         myPreAllocString += testString;
 
-        printf("testing += const char*: %s\n", static_cast<const char*>(myPreAllocString));
         REQUIRE(strncmp(static_cast<const char*>(myPreAllocString), testString, 11) == 0);
     }
 }
@@ -95,15 +94,32 @@ TEST_CASE("Testing member functions") {
 }
 
 TEST_CASE("Class Respects boundaries of string") {
-    SECTION("Using +=") {
+    SECTION("Using += char") {
         PreAllocString<3> myPreAllocString;
         myPreAllocString += 'e';
         myPreAllocString += 'e';
         myPreAllocString += 'e';
-        myPreAllocString += 'e';
 
+        REQUIRE(myPreAllocString[2] == '\0');
+    }
 
-        printf("using +=: %s\n", static_cast<const char*>(myPreAllocString));
-        REQUIRE(myPreAllocString[3] == '\0');
+    SECTION("Using += string" ) {
+        PreAllocString<10> myPreAllocString;
+        myPreAllocString += "1234567890";
+
+        REQUIRE(strncmp(static_cast<const char*>(myPreAllocString), "123456789", 10) == 0);
+    }
+
+    SECTION("Using = string" ) {
+        PreAllocString<10> myPreAllocString;
+        myPreAllocString = "1234567890";
+
+        REQUIRE(strncmp(static_cast<const char*>(myPreAllocString), "123456789", 10) == 0);
+    }
+
+    SECTION("Using = string" ) {
+        PreAllocString<10> myPreAllocString;
+        myPreAllocString.AddFormat("%s", "1234567890");
+        REQUIRE(strncmp(static_cast<const char*>(myPreAllocString), "123456789", 10) == 0);
     }
 }
