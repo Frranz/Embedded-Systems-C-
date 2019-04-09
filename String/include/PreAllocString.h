@@ -49,6 +49,7 @@ PreAllocString<Stringsize>::operator const void *() const{
     return static_cast<const void*>(myString);
 };
 
+// returns first character if idx would be out of bounds
 template<size_t Stringsize>
 const char & PreAllocString<Stringsize>::operator [] (const int idx){
     if(static_cast<unsigned int>(idx) < Stringsize && idx >= 0) {
@@ -58,6 +59,7 @@ const char & PreAllocString<Stringsize>::operator [] (const int idx){
     return myString[0];
 };
 
+//returns length of string (including \0)
 template<size_t Stringsize>
 size_t PreAllocString<Stringsize>::GetLength() const {
     size_t len = 0;
@@ -69,17 +71,19 @@ size_t PreAllocString<Stringsize>::GetLength() const {
     return len;
 };
 
+// returns amount of bytes reserved by internal String buffer
 template<size_t Stringsize>
 constexpr size_t PreAllocString<Stringsize>::SizeOf(){
     return Stringsize;
 }
 
+//resets length to 0
 template<size_t Stringsize>
 void PreAllocString<Stringsize>::Empty() {
     myString[0] = '\0';
 }
 
-
+//sets string to character (and \0)
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char rhs) {
     if(Stringsize >= 2) {
@@ -90,6 +94,7 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char rhs) {
     return *this;
 };
 
+//copies string to internal string buffer
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(const char* rhs) {
     unsigned int i = 0;
@@ -104,11 +109,14 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(const char* rh
     return *this;
 };
 
+
+//copies string to internal string buffer
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char* const rhs) {
     this += static_cast<const char*>(rhs);
 };
 
+//adds character to internal string buffer
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char rhs) {
     size_t iMyString = GetLength();
@@ -121,6 +129,7 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char rhs) {
     return *this;
 };
 
+//adds string to internal string buffer
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char const* rhs) {
     size_t i = GetLength();
@@ -133,18 +142,9 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char const* r
     myString[i] = '\0';
 
     return *this;
-
-
-    /*unsigned int iMyString = static_cast<unsigned int>(GetLength());
-
-    if(iMyString < Stringsize - 2) {
-        myString[iMyString] = *rhs;
-        ++iMyString;
-        myString[iMyString] = '\0';
-    }
-    return *this;*/
 };
 
+//adds formatted string to internal string buffer
 template<size_t Stringsize>
 void PreAllocString<Stringsize>::AddFormat(const char* format, ...) {
     va_list args;
@@ -155,6 +155,7 @@ void PreAllocString<Stringsize>::AddFormat(const char* format, ...) {
     va_end(args);
 };
 
+//adds whitespace character to internal string buffer
 template<size_t Stringsize>
 void PreAllocString<Stringsize>::AddWhiteSpace() {
     *this += ' ';
