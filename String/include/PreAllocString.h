@@ -54,7 +54,11 @@ PreAllocString<Stringsize>::operator const void *() const{
 
 template<size_t Stringsize>
 const char & PreAllocString<Stringsize>::operator [] (const int idx){
-    return myString[idx];
+    if(static_cast<unsigned int>(idx) < Stringsize && idx >= 0) {
+        return myString[idx];
+    }
+
+    return myString[0];
 };
 
 template<size_t Stringsize>
@@ -81,7 +85,7 @@ void PreAllocString<Stringsize>::Empty() {
 
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char rhs) {
-    if(Stringsize > 2) {
+    if(Stringsize => 2) {
         myString[0] = rhs;
         myString[1] = '\0';
     }
@@ -93,7 +97,7 @@ template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(const char* rhs) {
     unsigned int i = 0;
 
-    while(rhs[i] != '0' && i < Stringsize - 1) {
+    while(rhs[i] != '\0' && i < Stringsize) {
         myString[i] = rhs[i];
         ++i;
     }
@@ -106,21 +110,11 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(const char* rh
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator=(char* const rhs) {
     this += static_cast<const char*>(rhs);
-    /*unsigned int i = 0;
-
-    while(rhs[i] != '0' && i < Stringsize - 1) {
-        myString[i] = rhs[i];
-        ++i;
-    }
-
-    myString[i] = '\0';
-
-    return *this;*/
 };
 
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char rhs) {
-    unsigned int iMyString = static_cast<unsigned int>(GetLength());
+    size_t iMyString = GetLength();
 
     if(iMyString < Stringsize - 2) {
         myString[iMyString] = rhs;
@@ -132,14 +126,26 @@ PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char rhs) {
 
 template<size_t Stringsize>
 PreAllocString<Stringsize>& PreAllocString<Stringsize>::operator+=(char const* rhs) {
-    unsigned int iMyString = static_cast<unsigned int>(GetLength());
+    size_t i = GetLength();
+
+    while(rhs[i] != '\0' && i < Stringsize - 2) {
+        myString[i] = rhs[i];
+        ++i;
+    }
+
+    myString[i] = '\0';
+
+    return *this;
+
+
+    /*unsigned int iMyString = static_cast<unsigned int>(GetLength());
 
     if(iMyString < Stringsize - 2) {
         myString[iMyString] = *rhs;
         ++iMyString;
         myString[iMyString] = '\0';
     }
-    return *this;
+    return *this;*/
 };
 
 template<size_t Stringsize>
@@ -154,13 +160,7 @@ void PreAllocString<Stringsize>::AddFormat(const char* format, ...) {
 
 template<size_t Stringsize>
 void PreAllocString<Stringsize>::AddWhiteSpace() {
-    unsigned int iMyString = static_cast<unsigned int>(GetLength());
-
-    if(iMyString < Stringsize - 2) {
-        myString[iMyString] = ' ';
-        ++iMyString;
-        myString[iMyString] = '\0';
-    }
+    *this += ' ';
 };
 
 

@@ -23,19 +23,6 @@ TEST_CASE("Test implemented Operators") {
         REQUIRE(myPreAllocString[1] == '\0');
     }
 
-    SECTION("testing =operator with char* const") {
-        /*
-        dont know how to tes for char* const, because static cast throws warning, that fails compilation because -Werror
-
-        PreAllocString<11> myPreAllocString;
-        char myChar = 'w';
-        const char* myConstCharPointer = static_cast<char* const>(myChar);
-        myPreAllocString = myChar;
-
-        REQUIRE(myPreAllocString[0] == 'z');
-        REQUIRE(myPreAllocString[1] == '\0');*/
-    }
-
     SECTION("testing += operator with char") {
         PreAllocString<11> myPreAllocString;
         myPreAllocString = 't';
@@ -48,6 +35,15 @@ TEST_CASE("Test implemented Operators") {
         REQUIRE(myPreAllocString[2] == 's');
         REQUIRE(myPreAllocString[3] == 't');
         REQUIRE(myPreAllocString[4] == '\0');
+    }
+
+    SECTION("testing += operator with const char*") {
+        PreAllocString<11> myPreAllocString;
+        const char* testString = "testString";
+        myPreAllocString += testString;
+
+        printf("testing += const char*: %s\n", static_cast<const char*>(myPreAllocString));
+        REQUIRE(strncmp(static_cast<const char*>(myPreAllocString), testString, 11) == 0);
     }
 }
 
@@ -65,7 +61,7 @@ TEST_CASE("Testing member functions") {
     SECTION("Testing SizeOf") {
         PreAllocString<11> myPreAllocString;
 
-        REQUIRE(myPreAllocString.SizeOf() == 10);
+        REQUIRE(myPreAllocString.SizeOf() == 11);
     }
 
     SECTION("Testing Empty") {
@@ -95,5 +91,19 @@ TEST_CASE("Testing member functions") {
         REQUIRE(myPreAllocString[3] == ' ');
         REQUIRE(myPreAllocString[4] == 't');
         REQUIRE(myPreAllocString[5] == '\0');
+    }
+}
+
+TEST_CASE("Class Respects boundaries of string") {
+    SECTION("Using +=") {
+        PreAllocString<3> myPreAllocString;
+        myPreAllocString += 'e';
+        myPreAllocString += 'e';
+        myPreAllocString += 'e';
+        myPreAllocString += 'e';
+
+
+        printf("using +=: %s\n", static_cast<const char*>(myPreAllocString));
+        REQUIRE(myPreAllocString[3] == '\0');
     }
 }
