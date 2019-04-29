@@ -7,7 +7,7 @@ public:
     MultiDigit(unsigned int someInt, char* segmentPrint);
     operator const char*() const;
     void convertMyIntToArray();
-    char getDigitChar(unsigned int myInt, unsigned int row, unsigned int col);
+    char getDigitChar(unsigned int myInt, unsigned int row, unsigned int col) const;
 
 
 private:

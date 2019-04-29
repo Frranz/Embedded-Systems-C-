@@ -21,11 +21,18 @@ MultiDigit::MultiDigit(unsigned int myInt, char* segmentPrint) {
 };
 
 MultiDigit::operator const char *() const{
-    for(unsigned int i = 0; i < this->md1DigitsEnd; ++i ) {
-        for(unsigned int row = 0; row < 5; ++row) {
+    unsigned int counter = 0;
 
+    for(unsigned int row = 0; row < 5; ++row) {
+        for(unsigned int col = 0; col < (this->md1DigitsEnd * 4); ++col, ++counter) {
+            int currentDigit = col / 4;
+            buffer[counter] = getDigitChar(this->md1Digits[currentDigit], row, col % 4);
+            printf("row:%d;col:%d;char:%c\n", row, col %4, buffer[counter]);
         }
+        buffer[counter] = '\n';
+        ++counter;
     }
+    buffer[counter] = '\0';
     return buffer;
 };
 
@@ -45,15 +52,13 @@ void MultiDigit::convertMyIntToArray() {
       md1DigitsEndCopy--;
       remainder = numUns % base;
       numUns = numUns / base;
-
-      this->md1Digits[md1DigitsEndCopy] = remainder;
+            this->md1Digits[md1DigitsEndCopy] = remainder;
   }
 
   printf("0:%d;1:%d;2:%d,3:%d\n", this->md1Digits[0], this->md1Digits[1], this->md1Digits[2], this->md1Digits[3]);
 };
 
-char MultiDigit::getDigitChar(unsigned int myInt, unsigned int row, unsigned int col) {
-
+char MultiDigit::getDigitChar(unsigned int myInt, unsigned int row, unsigned int col) const{
     switch(col) {
         case 0:
             switch(row) {
@@ -80,7 +85,7 @@ char MultiDigit::getDigitChar(unsigned int myInt, unsigned int row, unsigned int
                 case 0:
                 case 2:
                 case 4:
-                    if(myInt == 4 || myInt == 4 || (myInt == 7 && row ==  4) ) {
+                    if(myInt == 1 || myInt == 4 || myInt == 4 || (myInt == 7 && row ==  4) ) {
                         return ' ';
                     }
                     return '-';
@@ -97,6 +102,7 @@ char MultiDigit::getDigitChar(unsigned int myInt, unsigned int row, unsigned int
                     if((myInt == 2 && row == 3) || (myInt == 5 && row == 1) || (myInt == 6 && row == 1)){
                         return '|';
                     }
+                    return ' ';
                 case 0:
                 case 2:
                 case 4:
