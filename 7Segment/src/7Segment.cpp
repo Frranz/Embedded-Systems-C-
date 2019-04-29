@@ -76,8 +76,34 @@ char MultiDigit::getDigitChar(unsigned int myInt, unsigned int row, unsigned int
             }
             break;
         case 1:
+            switch(row) {
+                case 0:
+                case 2:
+                case 4:
+                    if(myInt == 4 || myInt == 4 || (myInt == 7 && row ==  4) ) {
+                        return ' ';
+                    }
+                    return '-';
+                case 1:
+                case 3:
+                default:
+                    return ' ';
+            }
             break;
         case 2:
+            switch(row) {
+                case 1:
+                case 3:
+                    if((myInt == 2 && row == 3) || (myInt == 5 && row == 1) || (myInt == 6 && row == 1)){
+                        return '|';
+                    }
+                case 0:
+                case 2:
+                case 4:
+                default:
+                    return ' ';
+
+            }
             break;
         case 3:
             return ' ';
@@ -85,19 +111,4 @@ char MultiDigit::getDigitChar(unsigned int myInt, unsigned int row, unsigned int
         default:
             return ' ';
     }
-
-    if(col == 3){
-        return ' ';
-    }
-    if(col == 1) {
-
-    }
-
-    if(col == 2) {
-
-    }
-
-
-    return ' ';
-
 };
