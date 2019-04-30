@@ -1,15 +1,11 @@
 #ifndef MULTIDIGIT_H
 #define MULTIDIGIT_H
 
-#include <array>
-#include <iostream>
-
 template <typename... Args>
 class MultiDigit{
 public:
     char printString[sizeof...(Args) * 20 + 1];
     int digits[sizeof...(Args)];
-
 
     constexpr MultiDigit(Args...args):
         printString{},
