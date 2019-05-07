@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 
-#define CREATE(varName, blockCount, blockSize) PoolAllocator<blockSize, blockCount> varName 
+#define CREATE(varName, blockCount, blockSize) PoolAllocator<blockSize, blockCount> varName
 
 class IHeap
 {
@@ -13,9 +13,8 @@ class IHeap
         virtual size_t Available()           const = 0;
 };
 
-// impelementation
 
-
+// IMPLEMENTATION
 template <size_t blockSize, size_t blockCount>
 class PoolAllocator : IHeap{
     public:
@@ -24,10 +23,11 @@ class PoolAllocator : IHeap{
                 return nullptr;
             }
 
+            // get first empty block, starting from 0
             for(size_t i = 0; i < blockCount; ++i) {
                 if(blocksUsed[i] == false) {
                     blocksUsed[i] = true;
-                    ++availableBlocks;
+                    --availableBlocks;
                     return static_cast<void*>(data[i]);
                 }
             }
@@ -37,26 +37,31 @@ class PoolAllocator : IHeap{
 
         void Deallocate(void* deallocateThis) {
 
-            //check if pointer is nullptr, inside of boundaries of data variable and is at correct blockSize boundary 
-            //letztes auf jeden fall nochmal testen!!!!!!!!!!!!!!!!
-            if(deallocateThis == nullptr && deallocateThis < data[0] && deallocateThis >= data[blockCount] + blockCount){// && (deallocateThis - data[0]) % blockSize == 0) {
+            /**
+             * check whether pointer is/does any of those:
+             *  -nullptr
+             *  -points before data array
+             *  -points behind beginning of last entry in data array
+             *  -at beginning of a blocksize boundary
+            */
+            if(deallocateThis == nullptr || deallocateThis < data[0] || deallocateThis >= data[blockCount] || (static_cast<uint8_t*>(deallocateThis) - data[0]) % blockSize != 0) {
                 return;
             }
 
             size_t deallocIndex = (static_cast<uint8_t*>(deallocateThis) - data[0]) * blockSize;
-            for(size_t i = 0; i < 4; ++i) {
+            for(size_t i = 0; i < blockSize; ++i) {
                 data[deallocIndex][i] = 0;
             }
-
-            --availableBlocks;
+            blocksUsed[deallocIndex] = false;
+            ++availableBlocks;
         }
 
         size_t Available() const {
-            return availableBlocks;
+            return availableBlocks * blockSize;
         }
-    private: 
-        uint8_t data[blockCount][blockSize]{0};
-        bool blocksUsed[blockCount]{false};
-        size_t availableBlocks{0};
+    private:
+        uint8_t data[blockCount][blockSize]{};
+        bool blocksUsed[blockCount]{};
+        size_t availableBlocks{blockCount};
 };
 #endif

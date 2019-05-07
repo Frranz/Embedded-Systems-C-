@@ -1,16 +1,11 @@
 #include "../include/PoolAllocator.h"
 #include <iostream>
 int main() {
-    CREATE(testAlloc, 20, 4);
+  CREATE(testAlloc, 2, 4);
 
-    char* str = static_cast<char*>(testAlloc.Allocate(2));
+  char* testPtr1 = static_cast<char*>(testAlloc.Allocate(4));
+  testPtr1[0] = 'a';
+  testAlloc.Deallocate(testPtr1);
 
-    str[0] = 'h';
-    str[1] = 'a';
-    str[2] = 'l';
-    str[3] = 0;
-
-    std::cout << str;
-    
     return 0;
 }
