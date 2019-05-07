@@ -48,7 +48,7 @@ class PoolAllocator : IHeap{
                 return;
             }
 
-            size_t deallocIndex = (static_cast<uint8_t*>(deallocateThis) - data[0]) * blockSize;
+            size_t deallocIndex = (static_cast<uint8_t*>(deallocateThis) - data[0]) / blockSize;
             for(size_t i = 0; i < blockSize; ++i) {
                 data[deallocIndex][i] = 0;
             }
